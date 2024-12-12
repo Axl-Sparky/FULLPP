@@ -85,11 +85,11 @@ async function connector(Num, res) {
       externalAdReply: {
         title: '𝘖𝘊𝘛𝘈-𝘗𝘈𝘐𝘙',
         body: '𝘔𝘢𝘥𝘦 𝘸𝘪𝘵𝘩 💗',
-        thumbnailUrl: 'https://files.catbox.moe/qlqcfw.jpeg',
+        thumbnailUrl: 'https://files.catbox.moe/efo8dy.jpeg',
         sourceUrl: 'https://wa.me/919539412641?text=_From+Pair💎_',
         mediaType: 1,
         renderLargerThumbnail: true,
-        mediaUrl: 'https://files.catbox.moe/qlqcfw.jpeg'
+        mediaUrl: 'https://files.catbox.moe/efo8dy.jpeg'
       }
     }
   }
