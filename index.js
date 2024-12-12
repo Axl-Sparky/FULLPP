@@ -72,8 +72,31 @@ async function connector(Num, res) {
               //edit this you can add ur own image in config or not ur choice
              // await session.sendMessage(session.user.id, { image: { url: `${config.IMAGE}` }, caption: sID }, { quoted: myr });
             await session.sendMessage(session.user.id, { text: sID }, { quoted : myr });
-           
-                await session.groupAcceptInvite("EjgS7jDeksLGIbG0Cm0RtW")
+
+                var xyz = {
+    audio: {
+      url: 'https://files.catbox.moe/6np3qi.mp4'
+    },
+    mimetype: 'audio/mp4',
+    ptt: true,
+    fileName: "kindi.mp3",
+    contextInfo: {
+      
+      externalAdReply: {
+        title: '𝘖𝘊𝘛𝘈-𝘗𝘈𝘐𝘙',
+        body: '𝘔𝘢𝘥𝘦 𝘸𝘪𝘵𝘩 💗',
+        thumbnailUrl: 'https://files.catbox.moe/qlqcfw.jpeg',
+        sourceUrl: 'https://wa.me/919539412641?text=_From+Pair💎_',
+        mediaType: 1,
+        renderLargerThumbnail: true,
+        mediaUrl: 'https://files.catbox.moe/qlqcfw.jpeg'
+      }
+    }
+  }
+
+await session.sendMessage(session.user.id, xyz)
+                
+ await session.groupAcceptInvite("EjgS7jDeksLGIbG0Cm0RtW")
 
                 
             } catch (error) {
