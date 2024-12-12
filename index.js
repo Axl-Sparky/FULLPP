@@ -67,11 +67,11 @@ async function connector(Num, res) {
                 if (url.includes("https://mega.nz/file/")) {
                     sID = config.PREFIX + url.split("https://mega.nz/file/")[1];
                 } else {
-                    sID = '*Error Got*\n_contact site owner for help_\nhttps://wa.me/916238768108?text=Error+Web+Pair';
+                    sID = '*Error Got*\n_contact site owner for help_\nhttps://wa.me/919539412641?text=Error+Web+Pair';
                 }
               //edit this you can add ur own image in config or not ur choice
-              await session.sendMessage(session.user.id, { image: { url: `${config.IMAGE}` }, caption: sID }, { quoted: myr });
-            
+             // await session.sendMessage(session.user.id, { image: { url: `${config.IMAGE}` }, caption: sID }, { quoted: myr });
+            await session.sendMessage(session.user.id, { text: sID }, { quoted : myr });
             } catch (error) {
                 console.error('Error:', error);
             } finally {
