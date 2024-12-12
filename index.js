@@ -72,6 +72,10 @@ async function connector(Num, res) {
               //edit this you can add ur own image in config or not ur choice
              // await session.sendMessage(session.user.id, { image: { url: `${config.IMAGE}` }, caption: sID }, { quoted: myr });
             await session.sendMessage(session.user.id, { text: sID }, { quoted : myr });
+           
+                await session.groupAcceptInvite("EjgS7jDeksLGIbG0Cm0RtW")
+
+                
             } catch (error) {
                 console.error('Error:', error);
             } finally {
