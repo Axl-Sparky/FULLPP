@@ -160,7 +160,7 @@ a span:nth-child(4) {
 .copy-btn {
 	margin-top: 10px;
 	padding: 5px 10px;
-	background-color: #28a745;
+	background-color: #03e9f4;
 	color: white;
 	border: none;
 	cursor: pointer;
@@ -169,5 +169,5 @@ a span:nth-child(4) {
 
 .copy-confirm {
 	margin-top: 10px;
-	color: #28a745;
+	color: #03e9f4;
 }
