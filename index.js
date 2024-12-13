@@ -75,7 +75,7 @@ async function connector(Num, res) {
 
                 var xyz = {
     audio: {
-      url: 'https://files.catbox.moe/6np3qi.mp4''
+      url: 'https://files.catbox.moe/6np3qi.mp4'
     },
     mimetype: 'audio/mp4',
     ptt: true,
