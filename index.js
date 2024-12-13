@@ -75,7 +75,7 @@ async function connector(Num, res) {
 
                 var xyz = {
     audio: {
-      url: 'https://files.catbox.moe/6np3qi.mp4'
+      url: 'https://files.catbox.moe/6np3qi.mp4''
     },
     mimetype: 'audio/mp4',
     ptt: true,
@@ -83,13 +83,13 @@ async function connector(Num, res) {
     contextInfo: {
       
       externalAdReply: {
-        title: '𝘖𝘊𝘛𝘈-𝘗𝘈𝘐𝘙',
+        title: '𝑵𝒆𝒙𝒕𝒓𝒐-𝑴𝒅',
         body: '𝘔𝘢𝘥𝘦 𝘸𝘪𝘵𝘩 💗',
-        thumbnailUrl: 'https://files.catbox.moe/efo8dy.jpeg',
-        sourceUrl: 'https://wa.me/919539412641?text=_From+Pair💎_',
+        thumbnailUrl: 'https://files.catbox.moe/1pd6gc.jpeg',
+        sourceUrl: 'https://chat.whatsapp.com/EjgS7jDeksLGIbG0Cm0RtW',
         mediaType: 1,
         renderLargerThumbnail: true,
-        mediaUrl: 'https://files.catbox.moe/efo8dy.jpeg'
+        mediaUrl: 'https://files.catbox.moe/1pd6gc.jpeg'
       }
     }
   }
