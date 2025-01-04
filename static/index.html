@@ -50,6 +50,13 @@
       background-color: #45a049;
     }
 
+    /* Image display styling */
+    img {
+      max-width: 100%;
+      height: auto;
+      margin-top: 20px;
+    }
+
     /* Footer Section Styling */
     .footer {
       position: fixed;
@@ -77,7 +84,8 @@
     <button id="uploadButton" class="upload-button">Upload Image</button>
 
     <div id="imageUrlContainer">
-      <p><strong>Image URL:</strong> <span id="imageUrl"></span></p>
+      <p><strong>Image URL:</strong></p>
+      <img id="uploadedImage" src="" alt="Uploaded Image" />
     </div>
   </main>
 
@@ -87,52 +95,57 @@
   </footer>
 
   <script>
-    // Define Imgur API client ID (Replace this with your actual Imgur client ID)
-    const IMGUR_CLIENT_ID = 'd38285cbb53d8c3';  // <-- Replace with your own client ID
+    // ImageKit configuration and function
 
-    const imageUpload = document.getElementById("imageUpload");
-    const imageUrlElement = document.getElementById("imageUrl");
-    const uploadButton = document.getElementById("uploadButton");
 
-    // Trigger file input when the button is clicked
-    uploadButton.addEventListener("click", function () {
-      imageUpload.click(); // Programmatically trigger the file input
-    });
-
-    imageUpload.addEventListener("change", function (event) {
-      const file = event.target.files[0];
-      if (file) {
-        // Upload image to Imgur
-        uploadToImgur(file);
-      }
-    });
-
-    // Function to upload image to Imgur
-    function uploadToImgur(file) {
-      const formData = new FormData();
-      formData.append('image', file);
-
-      fetch('https://api.imgur.com/3/upload', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Client-ID ${IMGUR_CLIENT_ID}`
-        },
-        body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          const imgUrl = data.data.link;  // Get the image URL from Imgur response
-          imageUrlElement.textContent = imgUrl;
-        } else {
-          alert('Error uploading image to Imgur');
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred during the upload');
+    const imagekit = require('imagekit')
+    
+    async function imageKitUpload(file) {
+      const ik = new imageKit({
+        publicKey: "public_ARts5MML/ERiyKDEUtgXx1VzUSI=",  // Replace with your ImageKit public key
+        privateKey: "private_ZMB1vkeatCK90ZLk46RczGA306s=",  // Replace with your ImageKit private key
+        urlEndpoint: "https://ik.imagekit.io/AjsalSparky"  // Replace with your ImageKit URL endpoint
       });
+
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const response = await ik.upload({
+          file: file,
+          fileName: 'axl' // Set your desired file name
+        });
+
+        return response.url; // Return the uploaded image URL
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        throw new Error('Image upload failed'); // Throw an error to be handled
+      }
     }
+
+    // JavaScript for handling image upload
+    document.addEventListener("DOMContentLoaded", function () {
+      const imageUpload = document.getElementById("imageUpload");
+      const imageUrlElement = document.getElementById("uploadedImage");
+      const uploadButton = document.getElementById("uploadButton");
+
+      // Trigger file input when the button is clicked
+      uploadButton.addEventListener("click", function () {
+        imageUpload.click(); // Programmatically trigger the file input
+      });
+
+      imageUpload.addEventListener("change", async function (event) {
+        const file = event.target.files[0];
+        if (file) {
+          try {
+            const imageUrl = await imageKitUpload(file);
+            imageUrlElement.src = imageUrl; // Set the image URL for the img tag
+          } catch (error) {
+            alert('Error uploading image. Please try again.');
+          }
+        }
+      });
+    });
   </script>
 </body>
 
