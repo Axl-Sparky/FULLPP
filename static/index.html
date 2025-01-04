@@ -90,8 +90,8 @@
     const imagekit = require("imagekit");
 
     const ik = new imagekit({
-        publicKey: "public_ARts5MML/ERiyKDEUtgXx1VzUSI=",
-        privateKey: "private_ZMB1vkeatCK90ZLk46RczGA306s=",
+        publicKey: "public_ARts5MML/ERiyKDEUtgXx1VzUSI=", // Replace with your ImageKit public key
+        privateKey: "private_ZMB1vkeatCK90ZLk46RczGA306s=", // Replace with your ImageKit private key
         urlEndpoint: "https://ik.imagekit.io/AjsalSparky" // Replace with your ImageKit URL endpoint
     });
 
@@ -109,6 +109,9 @@
             try {
                 const fileBuffer = await file.arrayBuffer(); // Get file as buffer
                 const fileName = `axl`;
+
+                console.log("File selected:", file);  // Debugging output
+                console.log("File buffer size:", fileBuffer.byteLength);  // Debug size
 
                 const response = await ik.upload({
                     file: Buffer.from(fileBuffer),
