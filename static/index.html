@@ -1,97 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Upload System</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: white;
-            color: black;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nextro</title>
+  <style>
+    /* General page styling */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
 
-        .container {
-            width: 60%;
-            margin: 50px auto;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+    /* Header Section Styling */
+    .header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 20px;
+      width: 100%;
+      text-align: center;
+    }
 
-        h1 {
-            text-align: center;
-        }
+    /* Main Content Section Styling */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
 
-        input[type="file"] {
-            display: block;
-            margin: 20px 0;
-        }
+    .upload-button {
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
 
-        .error {
-            color: red;
-            display: none;
-        }
+    .upload-button:hover {
+      background-color: #45a049;
+    }
 
-        .success {
-            color: green;
-            display: none;
-        }
-    </style>
+    /* Footer Section Styling */
+    .footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+    }
+  </style>
 </head>
-<body class="theme-white">
-    <div class="container">
-        <h1>Image Upload System</h1>
-        <input type="file" id="imageUpload" accept="image/*">
-        <button id="uploadBtn">Upload Image</button>
-        <div id="message" class="error"></div>
+
+<body>
+  <!-- Header Section -->
+  <header class="header">
+    <h1>Nextro</h1>
+  </header>
+
+  <!-- Main Content Section -->
+  <main class="main-content">
+    <!-- Hidden file input (still functional) -->
+    <input type="file" id="imageUpload" class="upload-button" accept="image/*" style="display: none;" />
+    <!-- A div that will trigger the file input when clicked -->
+    <button id="uploadButton" class="upload-button">Upload Image</button>
+
+    <div id="imageUrlContainer">
+      <p><strong>Image URL:</strong> <span id="imageUrl"></span></p>
     </div>
+  </main>
 
-    <script>
-        const uploadBtn = document.getElementById('uploadBtn');
-        const imageUpload = document.getElementById('imageUpload');
-        const message = document.getElementById('message');
+  <!-- Footer Section -->
+  <footer class="footer">
+    <p>Nextro MD</p>
+  </footer>
 
-        const imageKitConfig = {
-            publicKey: "public_ARts5MML/ERiyKDEUtgXx1VzUSI=",
-            privateKey: "private_ZMB1vkeatCK90ZLk46RczGA306s=",
-            urlEndpoint: "https://ik.imagekit.io/AjsalSparky"
-        };
+  <script>
+    const imagekit = require("imagekit");
 
-        const imagekit = new ImageKit(imageKitConfig);
+    const ik = new imagekit({
+        publicKey: "public_ARts5MML/ERiyKDEUtgXx1VzUSI=",
+        privateKey: "private_ZMB1vkeatCK90ZLk46RczGA306s=",
+        urlEndpoint: "https://ik.imagekit.io/AjsalSparky" // Replace with your ImageKit URL endpoint
+    });
 
-        uploadBtn.addEventListener('click', async () => {
-            const file = imageUpload.files[0];
-            if (!file) {
-                showError('Please select an image to upload.');
-                return;
-            }
+    const imageUpload = document.getElementById("imageUpload");
+    const imageUrlElement = document.getElementById("imageUrl");
+    const uploadButton = document.getElementById("uploadButton");
 
+    uploadButton.addEventListener("click", function () {
+        imageUpload.click(); // Programmatically trigger the file input
+    });
+
+    imageUpload.addEventListener("change", async function (event) {
+        const file = event.target.files[0];
+        if (file) {
             try {
-                const response = await imagekit.upload({
-                    file: file,
-                    fileName: `axl_${Date.now()}` // Unique file name
+                const fileBuffer = await file.arrayBuffer(); // Get file as buffer
+                const fileName = `axl`;
+
+                const response = await ik.upload({
+                    file: Buffer.from(fileBuffer),
+                    fileName: fileName
                 });
 
-                showSuccess(`Image uploaded successfully! URL: ${response.url}`);
+                if (response) {
+                    const imgUrl = response.url;  // Get the image URL from ImageKit response
+                    imageUrlElement.textContent = imgUrl;
+                }
             } catch (error) {
-                showError('Failed to upload the image. Please try again.');
+                console.error("Upload error:", error);
+                alert('An error occurred during the upload');
             }
-        });
-
-        function showError(messageText) {
-            message.textContent = messageText;
-            message.classList.add('error');
-            message.classList.remove('success');
-            message.style.display = 'block';
         }
-
-        function showSuccess(messageText) {
-            message.textContent = messageText;
-            message.classList.add('success');
-            message.classList.remove('error');
-            message.style.display = 'block';
-        }
-    </script>
+    });
+  </script>
 </body>
+
 </html>
