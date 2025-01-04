@@ -3,114 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Page</title>
+    <title>Image Upload System</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+            background-color: white;
+            color: black;
         }
+
         .container {
-            background-color: #fff;
+            width: 60%;
+            margin: 50px auto;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         h1 {
             text-align: center;
-            margin-bottom: 20px;
         }
+
         input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 20px;
-        }
-        .image-preview {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        img {
-            max-width: 100%;
-            border-radius: 8px;
-        }
-        .image-url {
-            text-align: center;
-        }
-        .upload-btn {
             display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+            margin: 20px 0;
         }
-        .upload-btn:hover {
-            background-color: #0056b3;
+
+        .error {
+            color: red;
+            display: none;
+        }
+
+        .success {
+            color: green;
+            display: none;
+        }
+
+        .theme-red {
+            background-color: red;
+            color: white;
+        }
+
+        .theme-blue {
+            background-color: blue;
+            color: white;
+        }
+
+        .theme-white {
+            background-color: white;
+            color: black;
         }
     </style>
 </head>
-<body>
-
+<body class="theme-white">
     <div class="container">
-        <h1>Image Upload</h1>
-        <input type="file" id="fileInput" accept="image/*">
-        <button class="upload-btn" id="uploadBtn">Upload Image</button>
-        <div class="image-preview" id="imagePreview"></div>
-        <div class="image-url" id="imageUrl"></div>
+        <h1>Image Upload System</h1>
+        <input type="file" id="imageUpload" accept="image/*">
+        <button id="uploadBtn">Upload Image</button>
+        <div id="message" class="error"></div>
+        <div id="preview"></div>
     </div>
 
     <script>
-        const imagekit = require('imagekit');
-
-        const ik = new imagekit({
-            publicKey: "public_ARts5MML/ERiyKDEUtgXx1VzUSI=",
-            privateKey: "private_ZMB1vkeatCK90ZLk46RczGA306s=",
-            urlEndpoint: "https://ik.imagekit.io/AjsalSparky" // Replace with your ImageKit URL endpoint
-        });
-
-        const fileInput = document.getElementById('fileInput');
         const uploadBtn = document.getElementById('uploadBtn');
-        const imagePreview = document.getElementById('imagePreview');
-        const imageUrl = document.getElementById('imageUrl');
+        const imageUpload = document.getElementById('imageUpload');
+        const message = document.getElementById('message');
+        const preview = document.getElementById('preview');
 
-        uploadBtn.addEventListener('click', async () => {
-            const file = fileInput.files[0];
-            
+        uploadBtn.addEventListener('click', () => {
+            const file = imageUpload.files[0];
             if (!file) {
-                alert('Please select an image first.');
+                showError('Please select an image to upload.');
                 return;
             }
 
             const reader = new FileReader();
-            reader.onload = async () => {
-                const fileBuffer = reader.result;
-                
-                try {
-                    const fileName = `uploaded-${Date.now()}`; // Unique file name
-                    const response = await ik.upload({
-                        file: fileBuffer,
-                        fileName: fileName
-                    });
-
-                    imagePreview.innerHTML = `<img src="${response.url}" alt="Uploaded Image">`;
-                    imageUrl.innerHTML = `<p>Image URL: <a href="${response.url}" target="_blank">${response.url}</a></p>`;
-                } catch (error) {
-                    alert('An error occurred while uploading the image. Please try again.');
-                    console.error('Upload error:', error);
-                }
+            reader.onload = (e) => {
+                preview.innerHTML = `<img src="${e.target.result}" alt="Uploaded Image" style="max-width: 100%; margin-top: 20px;">`;
+                showSuccess('Image uploaded successfully!');
             };
-            reader.readAsDataURL(file); // Convert to base64 URL
+            reader.readAsDataURL(file);
         });
-    </script>
 
+        function showError(messageText) {
+            message.textContent = messageText;
+            message.classList.add('error');
+            message.classList.remove('success');
+            message.style.display = 'block';
+        }
+
+        function showSuccess(messageText) {
+            message.textContent = messageText;
+            message.classList.add('success');
+            message.classList.remove('error');
+            message.style.display = 'block';
+        }
+    </script>
 </body>
 </html>
