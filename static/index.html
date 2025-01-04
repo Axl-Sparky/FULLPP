@@ -4,57 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Page</title>
-    <script src="https://cdn.imagekit.io/v1.3.0/imagekit.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        .image-preview {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        .image-url {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <h1>Upload Image</h1>
-    <input type="file" id="imageUpload" accept="image/*">
-    <button id="uploadBtn">Upload</button>
-    <div id="imageUrlContainer"></div>
+
+    <div class="container">
+        <h1>Image Upload</h1>
+        <input type="file" id="fileInput" accept="image/*">
+        <div class="image-preview" id="imagePreview"></div>
+        <div class="image-url" id="imageUrl"></div>
+    </div>
 
     <script>
-        // Initialize ImageKit
+        const imagekit = require('imagekit');
 
-const imagekit = require("imagekit");
-        
-        const kmagekit = new imageKit({
-            publicKey: "public_ARts5MML/ERiyKDEUtgXx1VzUSI=", 
-            privateKey: "private_ZMB1vkeatCK90ZLk46RczGA306s=", 
-            urlEndpoint: "https://ik.imagekit.io/AjsalSparky"
+        const ik = new imagekit({
+            publicKey: "public_ARts5MML/ERiyKDEUtgXx1VzUSI=",
+            privateKey: "private_ZMB1vkeatCK90ZLk46RczGA306s=",
+            urlEndpoint: "https://ik.imagekit.io/AjsalSparky" // Replace with your ImageKit URL endpoint
         });
 
-        document.getElementById('uploadBtn').addEventListener('click', async () => {
-            const fileInput = document.getElementById('imageUpload');
-            const file = fileInput.files[0];
+        const fileInput = document.getElementById('fileInput');
+        const imagePreview = document.getElementById('imagePreview');
+        const imageUrl = document.getElementById('imageUrl');
 
+        fileInput.addEventListener('change', async (event) => {
+            const file = event.target.files[0];
+            
             if (file) {
-                try {
-                    const fileBuffer = file; // File object
-                    const fileName = `axl`; // Unique file name
+                const reader = new FileReader();
+                reader.onload = async () => {
+                    const fileBuffer = reader.result;
+                    
+                    try {
+                        const fileName = `uploaded-${Date.now()}`; // Unique file name
+                        const response = await ik.upload({
+                            file: fileBuffer,
+                            fileName: fileName
+                        });
 
-                    const response = await kmagekit.upload({
-                        file: fileBuffer,
-                        fileName: fileName,
-                    });
-
-                    // Display the image URL
-                    document.getElementById('imageUrlContainer').innerHTML = `
-                        <p>Image uploaded successfully!</p>
-                        <img src="${response.url}" alt="Uploaded Image">
-                        <p>Image URL: <a href="${response.url}" target="_blank">${response.url}</a></p>
-                    `;
-
-                    // Redirect to another page after a delay
-                    setTimeout(() => {
-                        window.location.href = "https://wp-ban-by-axl.vercel.app/"; // Replace with your target URL
-                    }, 3000); // Redirect after 3 seconds
-                } catch (error) {
-                    console.error("Upload error:", error);
-                }
-            } else {
-                alert('Please select an image to upload.');
+                        imagePreview.innerHTML = `<img src="${response.url}" alt="Uploaded Image">`;
+                        imageUrl.innerHTML = `<p>Image URL: <a href="${response.url}" target="_blank">${response.url}</a></p>`;
+                    } catch (error) {
+                        console.error('Upload error:', error);
+                    }
+                };
+                reader.readAsDataURL(file); // Convert to base64 URL
             }
         });
     </script>
+
 </body>
 </html>
