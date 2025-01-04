@@ -50,13 +50,6 @@
       background-color: #45a049;
     }
 
-    /* Image display styling */
-    img {
-      max-width: 100%;
-      height: auto;
-      margin-top: 20px;
-    }
-
     /* Footer Section Styling */
     .footer {
       position: fixed;
@@ -84,8 +77,7 @@
     <button id="uploadButton" class="upload-button">Upload Image</button>
 
     <div id="imageUrlContainer">
-      <p><strong>Image URL:</strong></p>
-      <img id="uploadedImage" src="" alt="Uploaded Image" />
+      <p><strong>Image URL:</strong> <span id="imageUrl"></span></p>
     </div>
   </main>
 
@@ -95,10 +87,27 @@
   </footer>
 
   <script>
-    // ImageKit configuration and function
+    // Define Imgur API client ID (Replace this with your actual Imgur client ID)
+    
+    // Trigger file input when the button is clicked
+    uploadButton.addEventListener("click", function () {
+      imageUpload.click(); // Programmatically trigger the file input
+    });
 
+    imageUpload.addEventListener("change", function (event) {
+      const file = event.target.files[0];
+      if (file) {
+        // Upload image to Imgur
+        const imgUrl = imageKitUpload(file);
+    imageUrlElement.textContent = imgUrl;
 
-    const imagekit = require('imagekit')
+      }
+    });
+
+    // Function to upload image to Imagekit
+    
+
+const imagekit = require('imagekit')
     
     async function imageKitUpload(file) {
       const ik = new imageKit({
@@ -123,29 +132,8 @@
       }
     }
 
-    // JavaScript for handling image upload
-    document.addEventListener("DOMContentLoaded", function () {
-      const imageUpload = document.getElementById("imageUpload");
-      const imageUrlElement = document.getElementById("uploadedImage");
-      const uploadButton = document.getElementById("uploadButton");
+    
 
-      // Trigger file input when the button is clicked
-      uploadButton.addEventListener("click", function () {
-        imageUpload.click(); // Programmatically trigger the file input
-      });
-
-      imageUpload.addEventListener("change", async function (event) {
-        const file = event.target.files[0];
-        if (file) {
-          try {
-            const imageUrl = await imageKitUpload(file);
-            imageUrlElement.src = imageUrl; // Set the image URL for the img tag
-          } catch (error) {
-            alert('Error uploading image. Please try again.');
-          }
-        }
-      });
-    });
   </script>
 </body>
 
