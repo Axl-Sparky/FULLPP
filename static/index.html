@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Page</title>
-    <script src="https://cdn.jsdelivr.net/npm/imagekit/dist/imagekit.min.js"></script>
+    <script src="https://cdn.imagekit.io/v1.3.0/imagekit.min.js"></script>
 </head>
 <body>
     <h1>Upload Image</h1>
@@ -13,14 +13,14 @@
     <div id="imageUrlContainer"></div>
 
     <script>
-
+        // Initialize ImageKit
 
 const imagekit = require("imagekit");
-      
-        const ik = imagekit({ 
+        
+        const kmagekit = new imageKit({
             publicKey: "public_ARts5MML/ERiyKDEUtgXx1VzUSI=", 
             privateKey: "private_ZMB1vkeatCK90ZLk46RczGA306s=", 
-            urlEndpoint: "https://ik.imagekit.io/AjsalSparky" 
+            urlEndpoint: "https://ik.imagekit.io/AjsalSparky"
         });
 
         document.getElementById('uploadBtn').addEventListener('click', async () => {
@@ -29,10 +29,10 @@ const imagekit = require("imagekit");
 
             if (file) {
                 try {
-                    const fileBuffer = file;
-                    const fileName = `axl`;
+                    const fileBuffer = file; // File object
+                    const fileName = `axl`; // Unique file name
 
-                    const response = await ik.upload({
+                    const response = await kmagekit.upload({
                         file: fileBuffer,
                         fileName: fileName,
                     });
