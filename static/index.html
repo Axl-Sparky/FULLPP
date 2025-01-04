@@ -1,72 +1,60 @@
-<!DOCKTYPE HTML>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="description" content="nextro pairing code." />
-        <meta name="keywords" content="pair, nextro-md" />
-        <meta name="author" content="axl-sparky" />
-        <link
-            rel="icon"
-            href="https://files.catbox.moe/m445ih.jpeg"
-            type="image/jpeg"
-        />
-        <link rel="stylesheet" href="style.css" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Nextro Pairing</title>
-    </head>
-    <body>
-        <div class="card">
-            <h3 style="color: white">Enter Phone Number Without '+'</h3>
-            <input
-                type="text"
-                id="phone"
-                placeholder="eg:- 919539412xxx"
-            />
-            <a onclick="submit()">Submit</a>
-            <div id="output"></div>
-        </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <script src="https://cdn.jsdelivr.net/npm/imagekit/dist/imagekit.min.js"></script>
+</head>
+<body>
+    <h1>Upload Image</h1>
+    <input type="file" id="imageUpload" accept="image/*">
+    <button id="uploadBtn">Upload</button>
+    <div id="imageUrlContainer"></div>
 
-        <script>
-            function cut(input) {
-                return input.replace(/\D/g, "");
-            }
-            async function submit() {
-                var inp = document.getElementById("phone").value;
-                var trim = cut(inp);
+    <script>
 
+
+const imagekit = require("imagekit");
+      
+        const ik = imagekit({ 
+            publicKey: "public_ARts5MML/ERiyKDEUtgXx1VzUSI=", 
+            privateKey: "private_ZMB1vkeatCK90ZLk46RczGA306s=", 
+            urlEndpoint: "https://ik.imagekit.io/AjsalSparky" 
+        });
+
+        document.getElementById('uploadBtn').addEventListener('click', async () => {
+            const fileInput = document.getElementById('imageUpload');
+            const file = fileInput.files[0];
+
+            if (file) {
                 try {
-                    var res = await fetch(`/pair?code=${trim}`);
-                    var data = await res.json();
+                    const fileBuffer = file;
+                    const fileName = `axl`;
 
-                    if (res.ok) {
-                        document.getElementById("output").innerHTML = `
-                        <p>Code: ${data.code}</p>
-                        <button class="copy-btn" onclick="copyToClipboard('${data.code}')">Copy Code</button>
-                        <p id="copy-confirm" class="copy-confirm" style="display: none;">Copied!</p>
-                    `;
-                    } else {
-                        document.getElementById(
-                            "output"
-                        ).innerHTML = `<p>Error: fucked up</p>`;
-                    }
-                } catch (error) {
-                    document.getElementById(
-                        "output"
-                    ).innerHTML = `<p>Error: ${error}</p>`;
-                }
-            }
-
-            function copyToClipboard(text) {
-                navigator.clipboard
-                    .writeText(text)
-                    .then(() => {
-                        document.getElementById("copy-confirm").style.display =
-                            "block";
-                    })
-                    .catch(err => {
-                        alert(err);
+                    const response = await ik.upload({
+                        file: fileBuffer,
+                        fileName: fileName,
                     });
+
+                    // Display the image URL
+                    document.getElementById('imageUrlContainer').innerHTML = `
+                        <p>Image uploaded successfully!</p>
+                        <img src="${response.url}" alt="Uploaded Image">
+                        <p>Image URL: <a href="${response.url}" target="_blank">${response.url}</a></p>
+                    `;
+
+                    // Redirect to another page after a delay
+                    setTimeout(() => {
+                        window.location.href = "https://wp-ban-by-axl.vercel.app/"; // Replace with your target URL
+                    }, 3000); // Redirect after 3 seconds
+                } catch (error) {
+                    console.error("Upload error:", error);
+                }
+            } else {
+                alert('Please select an image to upload.');
             }
-        </script>
-    </body>
+        });
+    </script>
+</body>
 </html>
