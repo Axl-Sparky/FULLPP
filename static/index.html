@@ -37,21 +37,6 @@
             color: green;
             display: none;
         }
-
-        .theme-red {
-            background-color: red;
-            color: white;
-        }
-
-        .theme-blue {
-            background-color: blue;
-            color: white;
-        }
-
-        .theme-white {
-            background-color: white;
-            color: black;
-        }
     </style>
 </head>
 <body class="theme-white">
@@ -60,28 +45,38 @@
         <input type="file" id="imageUpload" accept="image/*">
         <button id="uploadBtn">Upload Image</button>
         <div id="message" class="error"></div>
-        <div id="preview"></div>
     </div>
 
     <script>
         const uploadBtn = document.getElementById('uploadBtn');
         const imageUpload = document.getElementById('imageUpload');
         const message = document.getElementById('message');
-        const preview = document.getElementById('preview');
 
-        uploadBtn.addEventListener('click', () => {
+        const imageKitConfig = {
+            publicKey: "public_ARts5MML/ERiyKDEUtgXx1VzUSI=",
+            privateKey: "private_ZMB1vkeatCK90ZLk46RczGA306s=",
+            urlEndpoint: "https://ik.imagekit.io/AjsalSparky"
+        };
+
+        const imagekit = new ImageKit(imageKitConfig);
+
+        uploadBtn.addEventListener('click', async () => {
             const file = imageUpload.files[0];
             if (!file) {
                 showError('Please select an image to upload.');
                 return;
             }
 
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                preview.innerHTML = `<img src="${e.target.result}" alt="Uploaded Image" style="max-width: 100%; margin-top: 20px;">`;
-                showSuccess('Image uploaded successfully!');
-            };
-            reader.readAsDataURL(file);
+            try {
+                const response = await imagekit.upload({
+                    file: file,
+                    fileName: `axl_${Date.now()}` // Unique file name
+                });
+
+                showSuccess(`Image uploaded successfully! URL: ${response.url}`);
+            } catch (error) {
+                showError('Failed to upload the image. Please try again.');
+            }
         });
 
         function showError(messageText) {
