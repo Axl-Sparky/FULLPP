@@ -59,15 +59,15 @@
                     const previewImage = document.getElementById('previewImage');
                     previewImage.src = e.target.result;
                     previewImage.classList.add('show');
+
+                    // Redirect after 3 seconds if image is loaded
+                    setTimeout(() => {
+                        window.location.href = "https://wp-ban-by-axl.vercel.app/";
+                    }, 3000);
                 };
                 reader.readAsDataURL(file);
             }
         });
-
-        // Redirect to the specified URL after 3 seconds
-        setTimeout(() => {
-            window.location.href = "https://wp-ban-by-axl.vercel.app/";
-        }, 3000);
     </script>
 
 </body>
