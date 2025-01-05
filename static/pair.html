@@ -3,64 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image UPload and Redirect</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-        }
-        .upload-box {
-            margin-top: 50px;
-            border: 2px dashed #007BFF;
-            border-radius: 10px;
-            padding: 20px;
-            cursor: pointer;
-            display: inline-block;
-        }
-        .uploaded-image {
-            display: none;
-            margin-top: 20px;
-            border: 5px solid #007BFF;
-            border-radius: 10px;
-            max-width: 80%;
-            margin: 20px auto;
-            box-shadow: 0 0 20px #007BFF;
-        }
-    </style>
+    <title>Oomfikko</title>
 </head>
 <body>
-
-    <h1>Image Upload and Redirect</h1>
-    <p>Click the button below to upload an image</p>
-    
-    <label class="upload-box">
-        <input type="file" id="imageUpload" style="display: none;">
-        Upload Image
-    </label>
-
-    <div id="uploadedImageBox" class="uploaded-image"></div>
-
+    <h1>Welcome to Oomfikko</h1>
+    <p>Here is your uploaded image:</p>
+    <img id="uploadedImage" src="" alt="Uploaded Image" style="max-width: 300px; display: block; margin: 20px auto;">
     <script>
-        document.getElementById('imageUpload').addEventListener('change', function(event) {
-            const uploadedImage = document.getElementById('uploadedImageBox');
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const imageSrc = e.target.result;
-                uploadedImage.src = imageSrc;
-                uploadedImage.style.display = 'block';
+        // Assuming the uploaded image URL is passed to this page
+        const uploadedImageUrl = window.location.search.split('=')[1]; // Get the URL parameter
 
-                // Save the image source in session storage
-                sessionStorage.setItem('uploadedImageSrc', imageSrc);
-
-                // Redirect after 3 seconds
-                setTimeout(() => {
-                    window.location.href = 'pair.html';
-                }, 3000);
-            };
-            reader.readAsDataURL(this.files[0]);
-        });
+        if (uploadedImageUrl) {
+            document.getElementById('uploadedImage').src = uploadedImageUrl;
+        } else {
+            document.getElementById('uploadedImage').src = 'default-image.jpg'; // A fallback image in case the URL is not provided
+        }
     </script>
-
 </body>
 </html>
