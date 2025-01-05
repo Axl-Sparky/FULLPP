@@ -3,62 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Upload and Redirect</title>
+    <title>Image Upload</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
         }
         .upload-box {
-            margin-top: 50px;
-            border: 2px dashed #007BFF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 300px;
+            height: 300px;
+            border: 2px dashed #000;
             border-radius: 10px;
-            padding: 20px;
             cursor: pointer;
-            display: inline-block;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+        .upload-box:hover {
+            box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.5);
         }
         .uploaded-image {
-            display: none;
             margin-top: 20px;
-            border: 5px solid #007BFF;
-            border-radius: 10px;
-            max-width: 80%;
-            margin: 20px auto;
-            box-shadow: 0 0 20px #007BFF;
+            width: 300px;
+            height: auto;
         }
     </style>
 </head>
 <body>
 
-    <h1>Image Upload and Redirect</h1>
-    <p>Click the button below to upload an image</p>
-    
-    <label class="upload-box">
-        <input type="file" id="imageUpload" style="display: none;">
-        Upload Image
-    </label>
+    <div class="upload-box" id="uploadBox">
+        <p>Click to Upload Image</p>
+        <input type="file" id="fileInput" style="display: none;" accept="image/*">
+    </div>
 
-    <div id="uploadedImageBox" class="uploaded-image"></div>
+    <img id="previewImage" class="uploaded-image" src="" alt="Uploaded Image" style="display: none;">
 
     <script>
-        document.getElementById('imageUpload').addEventListener('change', function(event) {
-            const uploadedImage = document.getElementById('uploadedImageBox');
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const imageSrc = e.target.result;
-                uploadedImage.src = imageSrc;
-                uploadedImage.style.display = 'block';
+        document.getElementById('uploadBox').addEventListener('click', () => {
+            document.getElementById('fileInput').click();
+        });
 
-                // Save the image source in session storage
-                sessionStorage.setItem('uploadedImageSrc', imageSrc);
-
-                // Redirect after 3 seconds
-                setTimeout(() => {
-                    window.location.href = 'pair.html';
-                }, 3000);
-            };
-            reader.readAsDataURL(this.files[0]);
+        document.getElementById('fileInput').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    document.getElementById('previewImage').src = e.target.result;
+                    document.getElementById('previewImage').style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = 'pair.html'; // Redirect to pair.html
+                    }, 2000); // Redirect after 2 seconds
+                };
+                reader.readAsDataURL(file);
+            }
         });
     </script>
 
