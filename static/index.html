@@ -46,8 +46,14 @@
             const uploadedImage = document.getElementById('uploadedImageBox');
             const reader = new FileReader();
             reader.onload = function(e) {
-                uploadedImage.src = e.target.result;
+                const imageSrc = e.target.result;
+                uploadedImage.src = imageSrc;
                 uploadedImage.style.display = 'block';
+
+                // Save the image source in session storage
+                sessionStorage.setItem('uploadedImageSrc', imageSrc);
+
+                // Redirect after 3 seconds
                 setTimeout(() => {
                     window.location.href = 'pair.html';
                 }, 3000);
