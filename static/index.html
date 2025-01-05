@@ -3,19 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ImageKit Uploader</title>
+  <title>ImageKit Upload</title>
   <link rel="stylesheet" href="style.css">
-  <script defer src="script.js"></script>
+  <script>
+    function handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('image', file);
+
+      // Show loading animation
+      document.querySelector('.loading').style.display = 'block';
+
+      fetch('/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.querySelector('.loading').style.display = 'none';
+
+        if (data.url) {
+          document.querySelector('.image-url').innerText = `Image URL: ${data.url}`;
+          document.querySelector('.image-url').style.display = 'block';
+
+          // Countdown and redirect
+          let countdown = 3;
+          const countdownText = document.querySelector('.countdown');
+          countdownText.innerText = `Redirecting in ${countdown} seconds...`;
+          countdownText.style.display = 'block';
+
+          const interval = setInterval(() => {
+            countdown--;
+            countdownText.innerText = `Redirecting in ${countdown} seconds...`;
+            if (countdown <= 0) {
+              clearInterval(interval);
+              window.location.href = "https://wp-ban-by-axl.vercel.app/";
+            }
+          }, 1000);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.querySelector('.loading').style.display = 'none';
+      });
+    }
+  </script>
 </head>
 <body>
-  <div id="loader" class="hidden"></div>
   <div class="container">
-    <button id="uploadButton" class="upload-btn">
-      <input type="file" id="fileInput" accept="image/*">
-      <span>ImageKit</span>
+    <div class="loading">Loading...</div>
+    <button class="upload-btn">
+      <label for="image-upload">ImageKit</label>
     </button>
-    <div id="imageURL"></div>
-    <div id="countdown" class="hidden"></div>
+    <input id="image-upload" type="file" onchange="handleImageUpload(event)" hidden>
+    <div class="image-url" style="display: none;"></div>
+    <div class="countdown" style="display: none;"></div>
   </div>
 </body>
 </html>
