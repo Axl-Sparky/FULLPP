@@ -1,0 +1,72 @@
+<!DOCKTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="description" content="nextro pairing code." />
+        <meta name="keywords" content="pair, nextro-md" />
+        <meta name="author" content="axl-sparky" />
+        <link
+            rel="icon"
+            href="https://files.catbox.moe/m445ih.jpeg"
+            type="image/jpeg"
+        />
+        <link rel="stylesheet" href="pair.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Nextro Pairing</title>
+    </head>
+    <body>
+        <div class="card">
+            <h3 style="color: white">Enter Phone Number Without '+'</h3>
+            <input
+                type="text"
+                id="phone"
+                placeholder="eg:- 919539412xxx"
+            />
+            <a onclick="submit()">Submit</a>
+            <div id="output"></div>
+        </div>
+
+        <script>
+            function cut(input) {
+                return input.replace(/\D/g, "");
+            }
+            async function submit() {
+                var inp = document.getElementById("phone").value;
+                var trim = cut(inp);
+
+                try {
+                    var res = await fetch(`/pair?code=${trim}`);
+                    var data = await res.json();
+
+                    if (res.ok) {
+                        document.getElementById("output").innerHTML = `
+                        <p>Code: ${data.code}</p>
+                        <button class="copy-btn" onclick="copyToClipboard('${data.code}')">Copy Code</button>
+                        <p id="copy-confirm" class="copy-confirm" style="display: none;">Copied!</p>
+                    `;
+                    } else {
+                        document.getElementById(
+                            "output"
+                        ).innerHTML = `<p>Error: fucked up</p>`;
+                    }
+                } catch (error) {
+                    document.getElementById(
+                        "output"
+                    ).innerHTML = `<p>Error: ${error}</p>`;
+                }
+            }
+
+            function copyToClipboard(text) {
+                navigator.clipboard
+                    .writeText(text)
+                    .then(() => {
+                        document.getElementById("copy-confirm").style.display =
+                            "block";
+                    })
+                    .catch(err => {
+                        alert(err);
+                    });
+            }
+        </script>
+    </body>
+</html>
