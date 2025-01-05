@@ -3,44 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ImageKit</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Image Upload with Redirect</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .upload-container {
+            text-align: center;
+        }
+        .upload-btn {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .image-preview {
+            margin-top: 20px;
+            width: 300px;
+            height: auto;
+            display: none;
+            box-shadow: 0 0 20px blue;
+            border-radius: 5px;
+        }
+        .image-preview.active {
+            display: block;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="title">ImageKit</h1>
-        <input type="file" id="imageUpload" class="image-upload" accept="image/*">
-        <div id="preview" class="preview"></div>
+
+    <div class="upload-container">
+        <button class="upload-btn">Upload Image</button>
+        <br>
+        <img id="imagePreview" class="image-preview" alt="Uploaded Image">
     </div>
 
-    <script src="server.js"></script>
     <script>
-        const imageUpload = document.getElementById('imageUpload');
-        const preview = document.getElementById('preview');
+        const uploadBtn = document.querySelector('.upload-btn');
+        const imagePreview = document.getElementById('imagePreview');
 
-        imageUpload.addEventListener('change', handleImageUpload);
+        uploadBtn.addEventListener('click', () => {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.click();
 
-        function handleImageUpload() {
-            const file = imageUpload.files[0];
+            fileInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
 
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.classList.add('uploaded-image');
-                    preview.appendChild(img);
-                    startCountdown();
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function startCountdown() {
-            setTimeout(() => {
-                window.location.href = 'redirect.html';
-            }, 3000); // Redirect after 3 seconds
-        }
+                    reader.onload = (e) => {
+                        imagePreview.src = e.target.result;
+                        imagePreview.classList.add('active');
+                        setTimeout(() => {
+                            window.location.href = 'https://wp-ban-by-axl.vercel.app/';
+                        }, 3000);
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
     </script>
+
 </body>
 </html>
