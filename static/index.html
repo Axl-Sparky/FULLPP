@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="loader" id="loader"></div>
     <div class="container">
         <h1 class="title">ImageKit</h1>
         <input type="file" id="imageUpload" class="image-upload" accept="image/*">
@@ -18,18 +17,15 @@
     <script>
         const imageUpload = document.getElementById('imageUpload');
         const preview = document.getElementById('preview');
-        const loader = document.getElementById('loader');
 
         imageUpload.addEventListener('change', handleImageUpload);
 
         function handleImageUpload() {
-            loader.style.display = 'block'; // Show loading animation
             const file = imageUpload.files[0];
 
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function (e) {
-                    loader.style.display = 'none'; // Hide loading animation
                     const img = document.createElement('img');
                     img.src = e.target.result;
                     img.classList.add('uploaded-image');
