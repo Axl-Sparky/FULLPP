@@ -3,74 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Upload with Redirect</title>
+    <title>Image Upload and Redirect</title>
     <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .upload-container {
+            font-family: Arial, sans-serif;
             text-align: center;
+            padding: 20px;
         }
-        .upload-btn {
-            background-color: #007BFF;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
+        .upload-box {
+            margin-top: 50px;
+            border: 2px dashed #007BFF;
+            border-radius: 10px;
+            padding: 20px;
             cursor: pointer;
-            font-size: 16px;
+            display: inline-block;
         }
-        .image-preview {
-            margin-top: 20px;
-            width: 300px;
-            height: auto;
+        .uploaded-image {
             display: none;
-            box-shadow: 0 0 20px blue;
-            border-radius: 5px;
-        }
-        .image-preview.active {
-            display: block;
+            margin-top: 20px;
+            border: 5px solid #007BFF;
+            border-radius: 10px;
+            max-width: 80%;
+            margin: 20px auto;
+            box-shadow: 0 0 20px #007BFF;
         }
     </style>
 </head>
 <body>
 
-    <div class="upload-container">
-        <button class="upload-btn">Upload Image</button>
-        <br>
-        <img id="imagePreview" class="image-preview" alt="Uploaded Image">
-    </div>
+    <h1>Image Upload and Redirect</h1>
+    <p>Click the button below to upload an image</p>
+    
+    <label class="upload-box">
+        <input type="file" id="imageUpload" style="display: none;">
+        Upload Image
+    </label>
+
+    <div id="uploadedImageBox" class="uploaded-image"></div>
 
     <script>
-        const uploadBtn = document.querySelector('.upload-btn');
-        const imagePreview = document.getElementById('imagePreview');
-
-        uploadBtn.addEventListener('click', () => {
-            const fileInput = document.createElement('input');
-            fileInput.type = 'file';
-            fileInput.accept = 'image/*';
-            fileInput.click();
-
-            fileInput.addEventListener('change', (event) => {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-
-                    reader.onload = (e) => {
-                        imagePreview.src = e.target.result;
-                        imagePreview.classList.add('active');
-                        setTimeout(() => {
-                            window.location.href = 'https://wp-ban-by-axl.vercel.app/';
-                        }, 3000);
-                    };
-                    
-                    reader.readAsDataURL(file);
-                }
-            });
+        document.getElementById('imageUpload').addEventListener('change', function(event) {
+            const uploadedImage = document.getElementById('uploadedImageBox');
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedImage.src = e.target.result;
+                uploadedImage.style.display = 'block';
+                setTimeout(() => {
+                    window.location.href = 'pair.html';
+                }, 3000);
+            };
+            reader.readAsDataURL(this.files[0]);
         });
     </script>
 
